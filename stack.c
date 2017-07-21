@@ -19,76 +19,76 @@ typedef struct      //顺序栈结构体
     int stacksize;
 }SqStack;
 
-Status InitStack(SqStack &S)    //构造一个空栈
+Status InitStack(SqStack *S)    //构造一个空栈
 {
-    S.base = (SElemType *)malloc(STACK_INIT_SIZE *sizeof(SElemType));
-    if(!S.base)
+    (*S).base = (SElemType *)malloc(STACK_INIT_SIZE *sizeof(SElemType));
+    if(!(*S).base)
         printf("ERROR");
-    S.top = S.base;
-    S.stacksize = STACK_INIT_SIZE;
+    (*S).top = (*S).base;
+    (*S).stacksize = STACK_INIT_SIZE;
     return OK;
 }
 
-Status DestoryStack(SqStack &S)     //销毁栈S
+Status DestoryStack(SqStack *S)     //销毁栈S
 {
-    S.top = NULL;
-    S.stacksize = 0;
-    free(S.base);
+    (*S).top = NULL;
+    (*S).stacksize = 0;
+    free((*S).base);
     return OK;
 }
 
-Status ClearStack(SqStack &S)       //把栈S置为空栈
+Status ClearStack(SqStack *S)       //把栈S置为空栈
 {
-    S.top = S.base;
+    (*S).top = (*S).base;
     return OK;
 }
 
-Status StackEmpty(SqStack &S)       //判断是否为空栈
+Status StackEmpty(SqStack *S)       //判断是否为空栈
 {
-    if(S.top == S.base)
+    if((*S).top == (*S).base)
         return TRUE;
     else
         return FALSE;
 }
 
-int StackLength(SqStack &S)     //返回栈的长度
+int StackLength(SqStack *S)     //返回栈的长度
 {
-    if(S.top == S.base)
+    if((*S).top == (*S).base)
         return FALSE;
     else
-        return (S.top - S.base);
+        return ((*S).top - (*S).base);
 }
 
-Status GetTop(SqStack &S,SElemType &e)       //栈非空则返回栈顶元素
+Status GetTop(SqStack *S,SElemType *e)       //栈非空则返回栈顶元素
 {
-    if(S.top == S.base)
+    if((*S).top == (*S).base)
         return FALSE;
     else
-        e = *(S.top - 1);
-    return e;
+        *e = *((*S).top - 1);
+    return *e;
 }
 
-Status Push(SqStack &S,SElemType &e)    //往栈中插入新元素
+Status Push(SqStack *S,SElemType *e)    //往栈中插入新元素
 {
-    if(S.top - S.base >= STACK_INIT_SIZE){      //栈满，追加存储空间
-        S.base = (SElemType*) realloc(S.base,(S.stacksize + STACKINCREMENT)*sizeof(SElemType));
-        if(!S.base)
+    if((*S).top - (*S).base >= STACK_INIT_SIZE){      //栈满，追加存储空间
+        (*S).base = (SElemType*) realloc((*S).base,((*S).stacksize + STACKINCREMENT)*sizeof(SElemType));
+        if(!(*S).base)
             printf("ERROR");
-        S.top = S.base + STACK_INIT_SIZE;       //重新定位栈顶元素
-        S.stacksize += STACKINCREMENT;
+        (*S).top = (*S).base + STACK_INIT_SIZE;       //重新定位栈顶元素
+        (*S).stacksize += STACKINCREMENT;
     }
-    *S.top = e;
-    S.top++;
+    *(*S).top = *e;
+    (*S).top++;
     return OK;
 }
 
-Status Pop(SqStack &S,SElemType &e)     //删除栈顶元素，并返回其值
+Status Pop(SqStack *S,SElemType *e)     //删除栈顶元素，并返回其值
 {
-    if(S.top == S.base)
+    if((*S).top == (*S).base)
         return ERROR;
-    S.top--;
-    e = *S.top;
-    return e;
+    (*S).top--;
+    *e = *(*S).top;
+    return *e;
 }
 
 Status StackTraverse(SqStack S)     //遍历栈
@@ -113,7 +113,7 @@ int main()
     int flag,i,m,e,n;
 
     printf("构造一个空栈:\n");
-    InitStack(S);
+    InitStack(&S);
     printf("输入栈的长度:\n");
     scanf("%d",&n);
     printf("输入栈的元素:\n");
@@ -129,36 +129,36 @@ int main()
         case 0:
             return 0;
         case 1:
-            DestoryStack(S);
+            DestoryStack(&S);
             StackTraverse(S);
             break;
         case 2:
-            ClearStack(S);
+            ClearStack(&S);
             StackTraverse(S);
             break;
         case 3:
-           if(StackEmpty(S) == 1)
+           if(StackEmpty(&S) == 1)
                printf("空\n");
            else
                printf("非空\n");
             break;
         case 4:
-            m = StackLength(S);
+            m = StackLength(&S);
             printf("栈的长度为:%d \n",m);
             break;
         case 5:
-            m = GetTop(S,e);
+            m = GetTop(&S,&e);
             printf("栈顶元素为:%d \n",m);
             break;
         case 6:
             printf("请输入要插入的元素:\n");
             scanf("%d",&e);
-            Push(S,e);
+            Push(&S,&e);
             StackTraverse(S);
             break;
         case 7:
-            printf("要删除的元素:%d\n",GetTop(S,e));
-            m = Pop(S,e);
+            printf("要删除的元素:%d\n",GetTop(&S,&e));
+            m = Pop(&S,&e);
             StackTraverse(S);
             break;
         case 8:
