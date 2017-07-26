@@ -21,31 +21,31 @@ typedef struct      //顺序栈结构体
 
 Status InitStack(SqStack *S)    //构造一个空栈
 {
-    (*S).base = (SElemType *)malloc(STACK_INIT_SIZE *sizeof(SElemType));
-    if(!(*S).base)
+    S -> base = (SElemType *)malloc(STACK_INIT_SIZE *sizeof(SElemType));
+    if(! S -> base)
         printf("ERROR");
-    (*S).top = (*S).base;
-    (*S).stacksize = STACK_INIT_SIZE;
+    S -> top = S -> base;
+    S -> stacksize = STACK_INIT_SIZE;
     return OK;
 }
 
 Status DestoryStack(SqStack *S)     //销毁栈S
 {
-    (*S).top = NULL;
-    (*S).stacksize = 0;
-    free((*S).base);
+    S -> top = NULL;
+    S -> stacksize = 0;
+    free(S -> base);
     return OK;
 }
 
 Status ClearStack(SqStack *S)       //把栈S置为空栈
 {
-    (*S).top = (*S).base;
+    S -> top = S -> base;
     return OK;
 }
 
 Status StackEmpty(SqStack *S)       //判断是否为空栈
 {
-    if((*S).top == (*S).base)
+    if(S -> top == S -> base)
         return TRUE;
     else
         return FALSE;
@@ -53,41 +53,41 @@ Status StackEmpty(SqStack *S)       //判断是否为空栈
 
 int StackLength(SqStack *S)     //返回栈的长度
 {
-    if((*S).top == (*S).base)
+    if(S -> top == S -> base)
         return FALSE;
     else
-        return ((*S).top - (*S).base);
+        return (S -> top - S -> base);
 }
 
 Status GetTop(SqStack *S,SElemType *e)       //栈非空则返回栈顶元素
 {
-    if((*S).top == (*S).base)
+    if(S -> top == S -> base)
         return FALSE;
     else
-        *e = *((*S).top - 1);
+        *e = *(S -> top - 1);
     return *e;
 }
 
 Status Push(SqStack *S,SElemType *e)    //往栈中插入新元素
 {
-    if((*S).top - (*S).base >= STACK_INIT_SIZE){      //栈满，追加存储空间
-        (*S).base = (SElemType*) realloc((*S).base,((*S).stacksize + STACKINCREMENT)*sizeof(SElemType));
-        if(!(*S).base)
+    if(S -> top - S -> base >= STACK_INIT_SIZE){      //栈满，追加存储空间
+        S -> base = (SElemType*) realloc((*S).base,((*S).stacksize + STACKINCREMENT)*sizeof(SElemType));
+        if(! S -> base)
             printf("ERROR");
-        (*S).top = (*S).base + STACK_INIT_SIZE;       //重新定位栈顶元素
-        (*S).stacksize += STACKINCREMENT;
+        S -> top = S -> base + STACK_INIT_SIZE;       //重新定位栈顶元素
+        S -> stacksize += STACKINCREMENT;
     }
-    *(*S).top = *e;
-    (*S).top++;
+    *S -> top = *e;
+    S -> top++;
     return OK;
 }
 
 Status Pop(SqStack *S,SElemType *e)     //删除栈顶元素，并返回其值
 {
-    if((*S).top == (*S).base)
+    if(S -> top == S -> base)
         return ERROR;
-    (*S).top--;
-    *e = *(*S).top;
+    S -> top--;
+    *e = *S -> top;
     return *e;
 }
 
